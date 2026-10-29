@@ -31,9 +31,14 @@ A extensão utiliza `manifest.json` (Manifest V3), `dist/`, `css/`, `view/`, `im
 
 ## Identidade Indra Minsait Auth
 
-Esta versão utiliza a marca visual **Indra Group / Minsait** fornecida pelo solicitante, além de tema azul-petróleo, ícones personalizados e a identificação **Auth**. Trata-se de uma customização não oficial do Authenticator Extension. A interface foi ajustada sem modificar os scripts compilados de geração OTP, criptografia, armazenamento, backup ou leitura de QR Code.
+Esta versão utiliza a marca visual **Indra Group / Minsait** fornecida pelo solicitante, além de tema azul-petróleo, ícones personalizados e a identificação **Auth**. Trata-se de uma customização não oficial do Authenticator Extension. A interface foi ajustada preservando os módulos de geração OTP, criptografia, armazenamento e backup. **Apenas o recorte/decodificação da captura de QR em `dist/content.js` recebeu uma correção pontual**, que mantém o leitor original e seu mecanismo alternativo.
 
 ### Ativação de autenticação Microsoft
+
+**Atenção para o tipo de QR Code:** na página da Microsoft, depois de iniciar o cadastro do aplicativo autenticador, escolha **“Desejo usar um aplicativo autenticador diferente”** antes de escanear com esta extensão. O QR inicial do Microsoft Authenticator pode exigir o aplicativo oficial, pois está vinculado a registro e/ou notificações por push, não ao formato TOTP tradicional. A opção de outro aplicativo depende das políticas da organização.
+
+Se surgir **“QR Code não reconhecido”**: atualize os arquivos da extensão, recarregue-a em `chrome://extensions` e, ao selecionar o código, inclua a borda branca completa. Para testar o leitor, use somente QR de teste sem credenciais reais. **Não compartilhe QR Codes, segredos ou imagens da ativação Microsoft em issues ou chats.**
+
 
 No rodapé do popup, clique em **Ativar autenticador Microsoft** para abrir [Informações de segurança da conta Microsoft](https://mysignins.microsoft.com/security-info) em uma nova aba. Entre com sua conta corporativa, selecione **Adicionar método de entrada** e siga as opções disponíveis na organização.
 
