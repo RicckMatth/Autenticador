@@ -1,0 +1,69 @@
+name: Publicar Authenticator Chrome descompactado
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/publicar-chrome.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publicar-authenticator-chrome
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Baixar versao oficial compilada
+        shell: bash
+        run: |
+          set -euo pipefail
+          temp_dir="$(mktemp -d)"
+          curl --fail --location --retry 3 --show-error --silent \
+            "https://github.com/Authenticator-Extension/Authenticator/releases/download/v8.0.2/release.tar.gz" \
+            --output "$temp_dir/release.tar.gz"
+
+          tar -tzf "$temp_dir/release.tar.gz" | grep -q "release/chrome/manifest.json"
+          tar -xzf "$temp_dir/release.tar.gz" -C "$temp_dir"
+
+          test -f "$temp_dir/release/chrome/manifest.json"
+          test -f "$temp_dir/release/chrome/LICENSE"
+          test -f "$temp_dir/release/chrome/dist/background.js"
+          test -d "$temp_dir/release/chrome/_locales"
+          test -d "$temp_dir/release/chrome/images"
+          test -d "$temp_dir/release/chrome/view"
+
+          python3 - "$temp_dir/release/chrome/manifest.json" <<'PY'
+          import json, sys
+          with open(sys.argv[1], encoding="utf-8") as f:
+              manifest = json.load(f)
+          assert manifest["manifest_version"] == 3, "Manifest V3 exigido"
+          assert manifest["version"] == "8.0.2", "Versao inesperada"
+          print("Manifest valido:", manifest["version"])
+          PY
+
+          cp -a "$temp_dir/release/chrome/." "$GITHUB_WORKSPACE/"
+          echo "Arquivos oficiais extraidos e copiados para a raiz."
+
+      - name: Publicar os arquivos compilados na branch principal
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteracao pendente."
+          else
+            git commit -m "build: publicar Authenticator Chrome v8.0.2 descompactado"
+            git push origin HEAD:main
+          fi
