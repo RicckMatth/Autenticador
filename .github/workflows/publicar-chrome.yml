@@ -32,7 +32,8 @@ jobs:
             "https://github.com/Authenticator-Extension/Authenticator/releases/download/v8.0.2/release.tar.gz" \
             --output "$temp_dir/release.tar.gz"
 
-          tar -tzf "$temp_dir/release.tar.gz" | grep -q "release/chrome/manifest.json"
+          tar -tzf "$temp_dir/release.tar.gz" > "$temp_dir/arquivos.txt"
+          grep -q "release/chrome/manifest.json" "$temp_dir/arquivos.txt"
           tar -xzf "$temp_dir/release.tar.gz" -C "$temp_dir"
 
           test -f "$temp_dir/release/chrome/manifest.json"
