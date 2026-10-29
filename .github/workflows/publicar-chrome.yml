@@ -52,8 +52,8 @@ jobs:
           print("Manifest valido:", manifest["version"])
           PY
 
-          cp -a "$temp_dir/release/chrome/." "$GITHUB_WORKSPACE/"
-          echo "Arquivos oficiais extraidos e copiados para a raiz."
+          cp -a -n "$temp_dir/release/chrome/." "$GITHUB_WORKSPACE/"
+          echo "Arquivos oficiais importados sem substituir tema, manifesto e telas personalizados."
 
       - name: Publicar os arquivos compilados na branch principal
         shell: bash
