@@ -1,5 +1,15 @@
 # Autenticador — Chrome (sem compactação)
 
+<div align="center">
+
+<a href="https://github.com/RicckMatth/Autenticador/archive/refs/heads/main.zip">
+  <img src="assets/botao-download.svg" alt="⬇ BAIXAR AUTENTICADOR PARA CHROME — DOWNLOAD DIRETO ZIP" width="720">
+</a>
+
+**Clique no botão acima para baixar o ZIP diretamente do GitHub.** Depois de extrair, selecione a pasta que contém o arquivo `manifest.json` em `chrome://extensions` → **Carregar sem compactação**.
+
+</div>
+
 Repositório de distribuição **da versão oficial compilada do Authenticator Extension v8.0.2**, destinada a instalação local no Google Chrome pelo recurso **Carregar sem compactação**.
 
 **Projeto original:** https://github.com/Authenticator-Extension/Authenticator  
@@ -10,7 +20,7 @@ Repositório de distribuição **da versão oficial compilada do Authenticator E
 
 ## Como instalar no Chrome
 
-1. Clique em **Code → Download ZIP** neste repositório.
+1. Clique no **botão verde BAIXAR AUTENTICADOR** no topo desta página.
 2. Extraia o ZIP para uma pasta fixa. **Não** carregue o ZIP diretamente.
 3. Abra `chrome://extensions` no Chrome.
 4. Ative **Modo do desenvolvedor**, caso essa opção seja permitida.
