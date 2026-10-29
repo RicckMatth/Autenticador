@@ -37,6 +37,8 @@ Esta versão utiliza a marca visual **Indra Group / Minsait** fornecida pelo sol
 
 **Atenção para o tipo de QR Code:** na página da Microsoft, depois de iniciar o cadastro do aplicativo autenticador, escolha **“Desejo usar um aplicativo autenticador diferente”** antes de escanear com esta extensão. O QR inicial do Microsoft Authenticator pode exigir o aplicativo oficial, pois está vinculado a registro e/ou notificações por push, não ao formato TOTP tradicional. A opção de outro aplicativo depende das políticas da organização.
 
+**Teste seguro do leitor:** abra o [QR demonstrativo](tests/qr-demo-publico.png) e marque sua área com a opção de escanear da extensão. Ele usa uma chave pública fictícia, sem vínculo com contas reais. Se funcionar, mas o QR da Microsoft não, confira a opção de outro aplicativo autenticador.
+
 Se surgir **“QR Code não reconhecido”**: atualize os arquivos da extensão, recarregue-a em `chrome://extensions` e, ao selecionar o código, inclua a borda branca completa. Para testar o leitor, use somente QR de teste sem credenciais reais. **Não compartilhe QR Codes, segredos ou imagens da ativação Microsoft em issues ou chats.**
 
 
