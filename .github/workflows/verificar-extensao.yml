@@ -1,0 +1,59 @@
+name: Verificar Indra Auth (QR, manifest e interfaces)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/verificar-extensao.yml
+      - dist/content.js
+      - manifest.json
+      - view/**
+      - css/**
+      - images/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Baixar arquivos
+        uses: actions/checkout@v4
+
+      - name: Validar sintaxe do leitor de QR
+        run: node --check dist/content.js
+
+      - name: Validar extensao e seguranca da interface
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          m = json.loads(Path('manifest.json').read_text(encoding='utf-8'))
+          assert m['manifest_version'] == 3
+          assert m['version'] == '8.0.2'
+          assert m['name'] == 'Indra Minsait Auth'
+          assert m['permissions'] == ['activeTab', 'storage', 'identity', 'alarms', 'scripting']
+
+          for p in [*m['icons'].values(), *m['action']['default_icon'].values(),
+                    'dist/background.js', 'dist/popup.js', 'dist/content.js', 'dist/argon.js',
+                    'images/indra-minsait-logo.svg', 'css/indra-auth.css',
+                    'view/popup.html', 'view/import.html', 'view/options.html',
+                    'view/permissions.html']:
+              assert Path(p).is_file(), f'Arquivo ausente: {p}'
+
+          popup = Path('view/popup.html').read_text(encoding='utf-8')
+          assert 'https://mysignins.microsoft.com/security-info' in popup
+          assert '../dist/popup.js' in popup
+          assert '../css/indra-auth.css' in popup
+
+          reader = Path('dist/content.js').read_text(encoding='utf-8')
+          assert 'QR decoder fallback failed' in reader
+          assert 'Math.max(12,Math.min(36' in reader
+          assert reader.count('chrome.runtime.sendMessage({action:"getTotp"') == 1
+          print('Validação básica da extensão concluída.')
+          PY
